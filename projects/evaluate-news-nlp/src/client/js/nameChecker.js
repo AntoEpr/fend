@@ -11,6 +11,7 @@ function checkForName(inputText) {
     if(names.includes(inputText)) {
         alert("Welcome, Captain!")
     }
+    else { alert("Your name is not recognized. Please choose from these names: Picard, Janeway, Kirk, Archer and Georgiou.") }
 }
 
 export { checkForName }
