@@ -31,29 +31,27 @@ function validateInputRequest(req, res, next) {
   }
   return next();
 }
+// Aylien Text API integration for sentiment analysis
+const aylien = require('aylien_textapi');
+const textapi = new aylien({
+  application_key: process.env.APP_KEY
+});
 
 // PostHandler function
 function PostHandler(req, res, next) {
-  var aylien = require("aylien_textapi");
-  var textapi = new aylien({
-    application_id: process.env.APP_ID,
-    application_key: process.env.APP_KEY
-  });
-
-  textapi.sentiment({
-    'url': req.body.text
-  }, function (error, response) {
-    if (error) {
-      // Handle error if sentiment analysis fails
-      console.error('Sentiment Analysis Error:', error);
-      res.status(500).json({ error: 'Sentiment analysis failed.' });
-    } else {
-      // Send the sentiment analysis result as JSON response
-      res.status(200).json(response);
-    }
-  });
-}
-
+    textapi.sentiment({
+      url: req.body.text
+    }, function (error, response) {
+      if (error) {
+        // Handle error if sentiment analysis fails
+        console.error('Sentiment Analysis Error:', error);
+        res.status(500).json({ error: 'Sentiment analysis failed.' });
+      } else {
+        // Send the sentiment analysis result as JSON response
+        res.status(200).json(response);
+      }
+    });
+  }
 // Apply the middleware and handler to the route
 app.post('/article', validateInputRequest, PostHandler);
 
