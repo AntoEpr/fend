@@ -7,7 +7,6 @@ import './styles/form.scss'
 import './styles/header.scss'
 console.log(goodUrl);
 
-alert("I EXIST")
 console.log("CHANGE!!");
 export {
     goodUrl,
