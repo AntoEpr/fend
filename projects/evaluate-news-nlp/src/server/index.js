@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mockAPIResponse = require('./mockAPI.js')
-const fetch = require ('node-fetch')
+const fetch = import('node-fetch');
 // Load environment variable from .env file
 dotenv.config();
 
@@ -31,19 +31,22 @@ app.get('/test', function(req,res){
 const baseURL = "https://api.meaningcloud.com/sentiment-2.1";
 const apiKey = process.env.API_KEY;
 
-app.post('/add', async (req, res) => {
-  //generates the api url, which we retrieve the url input from the handleSubmit 
-  const data = req.body;
-  //it also fetches the url data
-  const apiURL = await fetch(`${baseURL}?key=${apiKey}&url=${data.url}&lang=en`, {method : "POST"});
-  console.log(`Input url: ${data.url}`)
+// Setup empty JS object to act as endpoint for all routes
+let projectData = {};
 
-  //try convert the url data into a json and send, otherwise catch the error
-  try{
-      const result = await apiURL.json();
-      res.send(result);
-
-  }catch(error){
-      console.log("error", error);
-  }
+// POST route to update projectData
+app.post('/data', (req, res) => {
+    const newData = req.body;
+    projectData.agreement = newData.agreement;
+    projectData.subjectivity = newData.subjectivity;
+    projectData.confidence = newData.confidence;
+    projectData.irony = newData.irony;
+    res.send(projectData);
 });
+
+// GET route to return projectData
+app.get('/all', getALL);
+
+function getALL(req, res) {
+    res.status(200).send(projectData);
+};
