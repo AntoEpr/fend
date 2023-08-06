@@ -3,8 +3,6 @@ const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const mockAPIResponse = require('./mockAPI.js')
-const fetch = import('node-fetch');
-const postUrl = 'http://localhost:8080/data';
 const app = express();
 
 // Load environment variable from .env file
@@ -27,7 +25,7 @@ const apiKey = process.env.API_KEY;
 let projectData = {};
 
 // POST route to update projectData
-app.post('/data', (req, res) => {
+app.post('/', (req, res) => {
     const newData = req.body;
     projectData.agreement = newData.agreement;
     projectData.subjectivity = newData.subjectivity;
@@ -37,10 +35,10 @@ app.post('/data', (req, res) => {
 });
 
 // GET route to return projectData
-app.get('/all', getALL);
+app.get('/', getALL);
 
 function getALL(req, res) {
-    res.sendFile('dist/index.html')
+    res.sendFile('dist/index.html').json();
 };
 
 // Serve service-worker.js

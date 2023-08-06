@@ -1,6 +1,5 @@
-async function handleSubmit(event) {
+ function handleSubmit(event) {
     event.preventDefault();
-
     // Check url to be valid url
     let inputURL = document.getElementById('name').value;
     Client.goodUrl(inputURL);
@@ -8,23 +7,27 @@ async function handleSubmit(event) {
     console.log("Checking handleSubmit");
 
     try {
-        const response = await fetch('/add', {
-            method: "POST",
-            credentials: "same-origin",
-            mode: "cors",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ url: inputURL })
+        const response = fetch ('/', {
+          method: "POST",
+          credentials: "same-origin",
+          mode: "cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: inputURL })
         });
-
-        const result = await response.json();
-
-        document.getElementById('agreement').innerHTML = result.agreement;
-        document.getElementById('subjectivity').innerHTML = result.subjectivity;
-        document.getElementById('confidence').innerHTML = `Confidence Rating: ${result.confidence}`;
-        document.getElementById('irony').innerHTML = result.irony;
-    } catch (error) {
+      
+        if (response.ok) {
+          const result = response.json();
+      
+          document.getElementById('agreement').textContent = result.agreement;
+          document.getElementById('subjectivity').textContent = result.subjectivity;
+          document.getElementById('confidence').textContent = result.confidence;
+          document.getElementById('irony').textContent = result.irony;
+        } else {
+          throw new Error('Request failed with status ' + response.status);
+        }
+      } catch (error) {
         console.log("error", error);
-    }
+      }
 }
 
 export { handleSubmit };

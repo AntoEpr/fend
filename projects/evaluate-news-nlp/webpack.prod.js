@@ -21,7 +21,7 @@ module.exports = {
                 loader: "babel-loader"
             },
         {
-            test: /.s?css$/,
+            test: /\.scss$/,
             use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
           },
         ],
@@ -36,6 +36,7 @@ module.exports = {
         new HtmlWebPackPlugin({
             template: "./src/client/views/index.html",
             filename: "./index.html",
+            inject: "body",
         }),
         new MiniCssExtractPlugin({ filename: "[name].css" }),
         new WorkboxPlugin.GenerateSW({
