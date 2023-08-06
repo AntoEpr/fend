@@ -1,4 +1,4 @@
-import { checkForName } from './js/nameChecker'
+import { goodUrl } from './js/urlChecker'
 import { handleSubmit } from './js/formHandler'
 import './styles/resets.scss'
 import './styles/base.scss'
@@ -10,6 +10,6 @@ console.log(checkForName);
 alert("I EXIST")
 console.log("CHANGE!!");
 export {
-    checkForName,
+    goodUrl,
     handleSubmit
 }

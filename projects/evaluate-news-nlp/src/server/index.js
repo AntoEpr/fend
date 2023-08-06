@@ -1,9 +1,14 @@
+//Setup server
+const express = require('express')
+var app = express()
+const cors = require('cors')
+app.use(cors())
 const dotenv = require('dotenv')
 dotenv.config()
 var path = require('path')
-const express = require('express')
 const mockAPIResponse = require('./mockAPI.js')
 const aylien = require('aylien_textapi')
+var app = express()
 
 var textapi = new aylien({
     application_key: process.env.API_KEY

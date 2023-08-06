@@ -2,7 +2,7 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title>Test</title>
+        <title>Udacity project</title>
         
     </head>
 
@@ -10,29 +10,48 @@
 
         <header>
             <div class="">
-                Logo
+                Udacity
             </div>
             <div class="">
-                navigation
+                Evaluate a News Article with NLP
             </div>
         </header>
 
         <main>
+            <p>
+                Type in an URL to try Aylien NLP.
+            </p>
             <section>
                 <form class="" onsubmit="return Client.handleSubmit(event)">
-                    <input id="name" type="text" name="input" value="" onblur="onBlur()" placeholder="Name">
+                    <input id="name" type="url" name="test-url" value="" onblur="onBlur()" placeholder="URL">
                     <input type="submit" name="" value="submit" onclick="return Client.handleSubmit(event)" onsubmit="return Client.handleSubmit(event)">
                 </form>
             </section>
 
-            <section>
-                <strong>Form Results:</strong>
-                <div id="results"></div>
+            <section class="results">
+                <ul>
+                    <li>
+                        <h3>Text Polarity:</h3>
+                        <p id="polarity"></p>
+                        <h4>Confidence: </h4>
+                        <p id="polarity_confidence"></p>
+                    </li>
+
+                    <li>
+                        <h3>Text Subjectivity:</h3>
+                        <p id="subjectivity"></p>
+                        <h4>Confidence: </h4>
+                        <p id="subjectivity_confidence"></p>
+                    </li>
+
+                    <h3>Text Excerpt:</h3>
+                    <p id="excerpt"></p>
+                </ul>   
             </section>
         </main>
 
         <footer>
-            <p>This is a footer</p>
+            <p>Made for Udacity Nanodegree project</p>
         </footer>
         <script>
             // Define the onBlur function
@@ -40,6 +59,8 @@
              // Code to be executed when the element loses focus
             console.log("Element lost focus");
             }
+            </script>
+            <script>
             // Check that service workers are supported
             if ('serviceWorker' in navigator) {
                 // Use the window load event to keep the page load performant
