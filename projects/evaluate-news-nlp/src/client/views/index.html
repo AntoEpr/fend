@@ -27,21 +27,24 @@
             <section class="results">
                 <ul>
                     <li>
-                        <h3>Text Polarity:</h3>
-                        <p id="polarity"></p>
-                        <h4>Confidence: </h4>
-                        <p id="polarity_confidence"></p>
+                        <h3>Agreement:</h3>
+                        <p id="agreement"></p>
+                    </li>
+                    <li><h3>Subjectivity:</h3>
+                        <p id="subjectivity"></p>
                     </li>
 
                     <li>
-                        <h3>Text Subjectivity:</h3>
-                        <p id="subjectivity"></p>
-                        <h4>Confidence: </h4>
-                        <p id="subjectivity_confidence"></p>
+                        <h3>Confidence:</h3>
+                        <p id="confidence"></p>
+                        </li>
+                        <li><h3>Confidence: </h3>
+                        <p id="confidence"></p>
                     </li>
-
-                    <h3>Text Excerpt:</h3>
-                    <p id="excerpt"></p>
+                    <li>
+                    <h3>Irony:</h3>
+                    <p id="irony"></p>
+                    </li>
                 </ul>   
             </section>
         </main>
@@ -56,18 +59,19 @@
             console.log("Element lost focus");
             }
             </script>
-<script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(registration => {
-            console.log('Service Worker registered:', registration);
-          })
-          .catch(error => {
-            console.error('Service Worker registration failed:', error);
-          });
-      });
-    }
-  </script>
+        <script>
+            //Check that service workers are supported
+            if ('serviceWorker' in navigator) {
+                window.addEventListener('load', function() {
+                    navigator.serviceWorker.register('/service-worker.js').then(function(registration) {
+                    //registration was successful
+                    console.log('ServiceWorker registration is successful: ', registration.scope);
+                    }, function(err) {
+                    //registration failed 
+                    console.log('ServiceWorker registration failed: ', err);
+                    });
+                });
+            }
+           </script>
     </body>
 </html>

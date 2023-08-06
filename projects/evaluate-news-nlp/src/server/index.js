@@ -2,7 +2,8 @@ const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-
+const mockAPIResponse = require('./mockAPI.js')
+const fetch = require ('node-fetch')
 // Load environment variable from .env file
 dotenv.config();
 
@@ -10,9 +11,10 @@ const app = express();
 
 // Middleware
 app.use(cors());
+const bodyParser = require('body-parser')
 app.use(express.static('dist'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 console.log(__dirname);
 
@@ -21,42 +23,27 @@ app.get('/service-worker.js', (req, res) => {
   res.sendFile(path.resolve(__dirname, 'service-worker.js'));
 });
 
-// Validate input middleware function
-function validateInputRequest(req, res, next) {
-  if (!req.body.text) {
-    // Check for input validation
-    return res.status(400).json({
-      message: 'Invalid input'
-    });
-  }
-  return next();
-}
-// Aylien Text API integration for sentiment analysis
-const aylien = require('aylien_textapi');
-const textapi = new aylien({
-  application_key: process.env.APP_KEY
-});
+app.get('/test', function(req,res){
+  res.send(mockAPIResponse)
+})
 
-// PostHandler function
-function PostHandler(req, res, next) {
-    textapi.sentiment({
-      url: req.body.text
-    }, function (error, response) {
-      if (error) {
-        // Handle error if sentiment analysis fails
-        console.error('Sentiment Analysis Error:', error);
-        res.status(500).json({ error: 'Sentiment analysis failed.' });
-      } else {
-        // Send the sentiment analysis result as JSON response
-        res.status(200).json(response);
-      }
-    });
-  }
-// Apply the middleware and handler to the route
-app.post('/article', validateInputRequest, PostHandler);
+//api
+const baseURL = "https://api.meaningcloud.com/sentiment-2.1";
+const apiKey = process.env.API_KEY;
 
-// Start the server
-const port = process.env.PORT || 8080;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}!`);
+app.post('/add', async (req, res) => {
+  //generates the api url, which we retrieve the url input from the handleSubmit 
+  const data = req.body;
+  //it also fetches the url data
+  const apiURL = await fetch(`${baseURL}?key=${apiKey}&url=${data.url}&lang=en`, {method : "POST"});
+  console.log(`Input url: ${data.url}`)
+
+  //try convert the url data into a json and send, otherwise catch the error
+  try{
+      const result = await apiURL.json();
+      res.send(result);
+
+  }catch(error){
+      console.log("error", error);
+  }
 });
