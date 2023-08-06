@@ -4,10 +4,11 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const mockAPIResponse = require('./mockAPI.js')
 const fetch = import('node-fetch');
+const postUrl = 'http://localhost:8080/data';
+const app = express();
+
 // Load environment variable from .env file
 dotenv.config();
-
-const app = express();
 
 // Middleware
 app.use(cors());
@@ -17,15 +18,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 console.log(__dirname);
-
-// Serve service-worker.js
-app.get('/service-worker.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname, 'service-worker.js'));
-});
-
-app.get('/test', function(req,res){
-  res.send(mockAPIResponse)
-})
 
 //api
 const baseURL = "https://api.meaningcloud.com/sentiment-2.1";
@@ -48,5 +40,21 @@ app.post('/data', (req, res) => {
 app.get('/all', getALL);
 
 function getALL(req, res) {
-    res.status(200).send(projectData);
+    res.sendFile('dist/index.html')
 };
+
+// Serve service-worker.js
+app.get('/service-worker.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'service-worker.js'));
+});
+
+// Serve mockAPIResponse
+app.get('/test', function(req,res){
+  res.send(mockAPIResponse)
+});
+
+// Start the server
+const port = 8080;
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
