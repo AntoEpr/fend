@@ -2,7 +2,7 @@
   "name": "evaluate_a_news_article",
   "version": "1.0.0",
   "scripts": {
-    "start": "node src/server/server.js",
+    "start": "node src/server/index.js",
     "build-prod": "webpack --config webpack.prod.js",
     "build-dev": "webpack-dev-server  --config webpack.dev.js --open",
     "test": "jest"

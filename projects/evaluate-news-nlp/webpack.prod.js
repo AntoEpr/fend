@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin")
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin")
 const TerserPlugin = require('terser-webpack-plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+
 module.exports = {
     entry: './src/client/index.js',
     mode: 'production',
@@ -15,14 +16,10 @@ module.exports = {
     module: {
         rules: [
             {
-                test: '/\.js$/',
+                test: /\.js$/,
                 exclude: /node_modules/,
                 loader: "babel-loader"
             },
-            {
-                test: /\.scss$/,
-                use: [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader' ]
-        },
         {
             test: /.s?css$/,
             use: [MiniCssExtractPlugin.loader, "css-loader", "sass-loader"],
@@ -31,8 +28,7 @@ module.exports = {
     },
     optimization: {
         minimizer: [
-          // For webpack@5 you can use the `...` syntax to extend existing minimizers (i.e. `terser-webpack-plugin`), uncomment the next line
-          // `...`,
+         new TerserPlugin(),
           new CssMinimizerPlugin(),
         ],
     },

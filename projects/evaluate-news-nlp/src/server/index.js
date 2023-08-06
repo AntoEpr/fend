@@ -1,35 +1,64 @@
-//Setup server
-const express = require('express')
-var app = express()
-const cors = require('cors')
-app.use(cors())
-const dotenv = require('dotenv')
-dotenv.config()
-var path = require('path')
-const mockAPIResponse = require('./mockAPI.js')
-const aylien = require('aylien_textapi')
-var app = express()
+const path = require('path');
+const express = require('express');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
-var textapi = new aylien({
-    application_key: process.env.API_KEY
-  })
+// Load environment variable from .env file
+dotenv.config();
 
-const app = express()
+const app = express();
 
-app.use(express.static('dist'))
+// Middleware
+app.use(cors());
+app.use(express.static('dist'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-console.log(__dirname)
+console.log(__dirname);
 
-app.get('/', function (req, res) {
-    // res.sendFile('dist/index.html')
-    res.sendFile('dist/index.html')
-})
+// Serve service-worker.js
+app.get('/service-worker.js', (req, res) => {
+  res.sendFile(path.resolve(__dirname, 'service-worker.js'));
+});
 
-// designates what port the app will listen to for incoming requests
-app.listen(8081, function () {
-    console.log('Example app listening on port 8081!')
-})
+// Validate input middleware function
+function validateInputRequest(req, res, next) {
+  if (!req.body.text) {
+    // Check for input validation
+    return res.status(400).json({
+      message: 'Invalid input'
+    });
+  }
+  return next();
+}
 
-app.get('/test', function (req, res) {
-    res.send(mockAPIResponse)
-})
+// PostHandler function
+function PostHandler(req, res, next) {
+  var aylien = require("aylien_textapi");
+  var textapi = new aylien({
+    application_id: process.env.APP_ID,
+    application_key: process.env.APP_KEY
+  });
+
+  textapi.sentiment({
+    'url': req.body.text
+  }, function (error, response) {
+    if (error) {
+      // Handle error if sentiment analysis fails
+      console.error('Sentiment Analysis Error:', error);
+      res.status(500).json({ error: 'Sentiment analysis failed.' });
+    } else {
+      // Send the sentiment analysis result as JSON response
+      res.status(200).json(response);
+    }
+  });
+}
+
+// Apply the middleware and handler to the route
+app.post('/article', validateInputRequest, PostHandler);
+
+// Start the server
+const port = process.env.PORT || 8080;
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}!`);
+});

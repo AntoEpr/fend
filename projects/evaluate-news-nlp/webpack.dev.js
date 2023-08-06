@@ -8,9 +8,6 @@ module.exports = {
     mode: 'development',
     devtool: 'source-map',
     stats: 'verbose',
-    optimization: {
-        minimize: true,
-    },
     output: {
         libraryTarget: 'var',
         library: 'Client'
@@ -18,7 +15,7 @@ module.exports = {
     module: {
         rules: [
             {
-                test: '/\.js$/',
+                test: /\.js$/,
                 exclude: /node_modules/,
                 loader: "babel-loader"
             },

@@ -9,12 +9,8 @@
     <body>
 
         <header>
-            <div class="">
-                Udacity
-            </div>
-            <div class="">
-                Evaluate a News Article with NLP
-            </div>
+        <h1>Udacity</h1>
+        <h2>Evaluate a News Article with NLP</h2>
         </header>
 
         <main>
@@ -60,14 +56,18 @@
             console.log("Element lost focus");
             }
             </script>
-            <script>
-            // Check that service workers are supported
-            if ('serviceWorker' in navigator) {
-                // Use the window load event to keep the page load performant
-                window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/service-worker.js')
-                })
-            }
-        </script>
+<script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(registration => {
+            console.log('Service Worker registered:', registration);
+          })
+          .catch(error => {
+            console.error('Service Worker registration failed:', error);
+          });
+      });
+    }
+  </script>
     </body>
 </html>
